@@ -2,525 +2,480 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>阅读小英雄🌈 | 210题完整版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>故事深解·完整记忆馆</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(145deg, #fff1e6 0%, #fde2c4 100%);
-            font-family: 'Comic Neue', 'Chalkboard SE', 'Comic Sans MS', 'Segoe UI Emoji', system-ui, -apple-system, BlinkMacSystemFont, cursive, sans-serif;
-            padding: 16px 12px 32px;
-            min-height: 100vh;
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, -apple-system, 'Microsoft YaHei', sans-serif;
+            background: #f0f4f8;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .deco {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-            font-size: 55px;
-            opacity: 0.2;
-            user-select: none;
+        .app-header {
+            background: linear-gradient(135deg, #2c3e4e 0%, #1a2a36 100%);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            z-index: 10;
         }
-        .deco1 { top: 10px; left: 5px; transform: rotate(-8deg); }
-        .deco2 { bottom: 20px; right: 8px; transform: rotate(12deg); font-size: 65px; }
-        .deco3 { top: 30%; right: 2%; font-size: 45px; opacity: 0.18; display: none; }
-        
-        .container {
-            max-width: 100%;
+        .app-header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .app-header h1:before {
+            content: "📖🎧";
+            font-size: 1.5rem;
+        }
+        .app-header p {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin-top: 0.2rem;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1px;
+            background: #e2e8f0;
+        }
+
+        .story-list {
+            width: 280px;
+            background: #ffffff;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+        }
+
+        .story-list-inner {
+            padding: 1rem 0.5rem 2rem 0.5rem;
+        }
+
+        .story-item {
+            padding: 0.6rem 0.9rem;
+            margin: 0.2rem 0.3rem;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #1e2a3e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fefefe;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .story-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateX(3px);
+        }
+
+        .story-item.active {
+            background: #eef2ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+            box-shadow: 0 2px 6px rgba(59,130,246,0.15);
+            font-weight: 600;
+        }
+
+        .story-item.active:before {
+            content: "▶";
+            font-size: 0.65rem;
+            color: #3b82f6;
+            margin-right: 4px;
+        }
+
+        .story-item:before {
+            content: "📘";
+            font-size: 0.9rem;
+            margin-right: 6px;
+            opacity: 0.7;
+        }
+
+        .detail-panel {
+            flex: 1;
+            background: #fefcf5;
+            overflow-y: auto;
+            padding: 1.2rem 1.8rem;
+        }
+
+        .detail-card {
+            max-width: 1000px;
             margin: 0 auto;
-            background: rgba(255, 254, 245, 0.96);
-            backdrop-filter: blur(2px);
-            border-radius: 48px;
-            box-shadow: 0 16px 32px rgba(255, 100, 40, 0.18);
-            padding: 16px 18px 32px;
-            position: relative;
-            z-index: 2;
-            border: 2px solid #ffefcf;
+            animation: fadeSlideUp 0.3s ease;
         }
 
-        .hero {
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .voice-bar {
+            background: linear-gradient(135deg, #fff6e5 0%, #ffe6cc 100%);
+            border-radius: 48px;
+            padding: 10px 18px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 18px;
-            background: #fff3e0;
-            border-radius: 60px;
-            padding: 8px 16px;
+            border: 1px solid #ffdfb3;
         }
-        .title-box h1 {
-            font-size: 1.65rem;
-            background: linear-gradient(135deg, #F97316, #FBBF24);
+        .voice-bar label {
+            font-weight: 700;
+            color: #b45f1b;
+            font-size: 0.85rem;
+        }
+        .voice-bar select {
+            padding: 6px 14px;
+            border-radius: 40px;
+            border: 1px solid #f5bc70;
+            background: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-width: 220px;
+        }
+        .test-voice-btn {
+            background: #f59e0b;
+            border: none;
+            border-radius: 32px;
+            padding: 5px 16px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .voice-status {
+            font-size: 0.7rem;
+            color: #b45309;
+            background: #fff0e0;
+            padding: 3px 10px;
+            border-radius: 40px;
+        }
+
+        .detail-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2c3e4e, #1f4e6e);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: 1px 1px 6px #ffd9a5;
-        }
-        .title-box p {
-            font-size: 0.7rem;
-            background: #ffefcf;
-            border-radius: 40px;
-            padding: 3px 12px;
-            color: #b45f2b;
-            font-weight: bold;
-        }
-        .tips {
-            background: #FFE0A3;
-            border-radius: 40px;
-            padding: 5px 14px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #8B4513;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .tips span { font-size: 1rem; }
-
-        .story-section {
-            background: #FFFBF0;
-            border-radius: 40px;
-            margin-bottom: 28px;
-            padding: 8px 16px 20px;
-            box-shadow: 0 8px 18px rgba(251, 146, 60, 0.12);
-            border: 1px solid #ffe0b5;
-        }
-        .story-title {
-            font-size: 1.45rem;
-            font-weight: bold;
-            background: #FBCA77;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px 22px;
-            margin: 8px 0 16px 0;
-            border-radius: 80px;
-            color: #844d29;
-            box-shadow: 0 4px 0 #E1A451;
+            border-left: 6px solid #f59e0b;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .question-card {
-            background: #fffaf2;
-            border-radius: 36px;
-            margin-bottom: 22px;
-            padding: 14px 16px;
-            border: 2px solid #ffdcac;
-        }
-        .question-text {
-            font-weight: 800;
-            font-size: 1rem;
-            margin-bottom: 14px;
-            color: #B45F2B;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            flex-wrap: wrap;
-            line-height: 1.35;
-        }
-        .q-num {
-            background: #FFAD60;
-            border-radius: 50px;
-            padding: 3px 12px;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .options-area {
+        .detail-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-            background: #FFF3E6;
-            padding: 12px 8px;
-            border-radius: 48px;
-        }
-        .option-btn {
-            background: #FCE6C4;
-            border: 2px solid #FFC489;
-            border-radius: 60px;
-            padding: 8px 16px;
-            font-weight: bold;
+            gap: 0.8rem;
+            background: #f3f4f6;
+            padding: 0.6rem 1.2rem;
+            border-radius: 32px;
+            margin-bottom: 1.2rem;
             font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.12s ease;
-            color: #7b3f00;
-            font-family: inherit;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-            flex: 1 0 auto;
-            min-width: 110px;
-            text-align: center;
-            touch-action: manipulation;
-        }
-        .option-btn:active {
-            transform: scale(0.96);
-            background: #FFD9A5;
-        }
-        .option-correct-feedback {
-            background: #b9e6b3 !important;
-            border-color: #2e7d32 !important;
-            color: #1a4d1a;
-            box-shadow: 0 0 0 2px #c8e6c9;
-        }
-        .option-wrong-feedback {
-            background: #ffe0e0 !important;
-            border-color: #d32f2f !important;
-            color: #a12222;
-            text-decoration: line-through;
-        }
-        .feedback-msg {
-            font-size: 0.78rem;
-            margin: 6px 0 8px 8px;
-            padding: 6px 14px;
-            border-radius: 40px;
-            display: inline-block;
-            font-weight: bold;
-            max-width: 95%;
-            word-break: break-word;
-        }
-        .feedback-correct {
-            background: #c8e6c9;
-            color: #1e5a1e;
-        }
-        .feedback-wrong {
-            background: #ffdddd;
-            color: #b53b3b;
-        }
-        
-        .answer-zone {
-            margin-top: 10px;
-            border-top: 2px dotted #ffe0b0;
-            padding-top: 14px;
-            display: flex;
-            justify-content: flex-start;
-        }
-        .answer-block {
-            display: inline-block;
-            background: #FFE3B5;
-            border: 3px dashed #F7A55A;
-            border-radius: 60px;
-            padding: 10px 24px;
-            min-width: 160px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.18s ease;
-            color: #A35213;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            font-family: inherit;
-            touch-action: manipulation;
-        }
-        .answer-block:active {
-            transform: scale(0.96);
-            background: #FFD18C;
-        }
-        .answer-show-style {
-            background: #C5E0B4 !important;
-            border: 3px solid #479c2c !important;
-            color: #2a5c1a !important;
-            box-shadow: 0 4px 12px rgba(72,187,60,0.3);
         }
 
-        .action-bar {
-            text-align: center;
-            margin: 15px 0 10px;
+        .meta-tag {
+            background: white;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
         }
-        .reset-btn {
-            background: #FFA559;
-            border: none;
+
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #edeae2;
+        }
+
+        .section h3 {
             font-size: 1.2rem;
-            font-weight: bold;
-            padding: 12px 30px;
-            border-radius: 80px;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            color: #2d3e50;
+            border-left: 4px solid #f59e0b;
+            padding-left: 10px;
+        }
+
+        .section p {
+            line-height: 1.5;
+            font-size: 0.93rem;
+            color: #2c3e2f;
+        }
+
+        .speech-btn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            border: none;
+            border-radius: 40px;
+            padding: 5px 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
             color: white;
             cursor: pointer;
-            font-family: inherit;
-            box-shadow: 0 6px 0 #C46F1A;
-            transition: 0.05s linear;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            touch-action: manipulation;
+            margin-left: 10px;
+            transition: all 0.2s;
         }
-        .reset-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 3px 0 #C46F1A;
+        .speech-btn:hover { transform: scale(1.02); }
+        .speech-btn.playing {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            animation: pulse 0.8s infinite;
         }
-        footer {
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+        .key-questions {
+            background: #faf8f2;
+            border-radius: 24px;
+            padding: 0.8rem 1.4rem;
+            border: 1px solid #ffe6c7;
+        }
+        .key-questions summary {
+            font-weight: 700;
+            cursor: pointer;
+            color: #b45309;
+            font-size: 0.95rem;
+            list-style: none;
+        }
+        .key-questions summary::-webkit-details-marker { display: none; }
+        .key-questions summary:before { content: "🔍 "; }
+        .question-grid {
+            margin-top: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .q-item {
+            background: white;
+            border-radius: 18px;
+            padding: 0.5rem 1rem;
+            font-size: 0.88rem;
+            border-left: 3px solid #facc15;
+            cursor: pointer;
+        }
+        .q-question { font-weight: 600; color: #2c3e4e; }
+        .q-answer {
+            display: none;
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: #f1f2f6;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            border-left: 2px solid #f59e0b;
+        }
+        .q-item.open .q-answer { display: block; }
+
+        .footer-note {
             text-align: center;
-            font-size: 0.7rem;
-            margin-top: 24px;
-            color: #bd8f62;
-            background: #fff2e2;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 6px 20px;
-            border-radius: 50px;
+            font-size: 0.65rem;
+            color: #8a7a62;
+            margin-top: 1.5rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed #e2dacf;
         }
-        
-        @media (max-width: 550px) {
-            body { padding: 12px 10px 24px; }
-            .container { padding: 12px 12px 28px; border-radius: 36px; }
-            .story-title { font-size: 1.28rem; padding: 4px 18px; }
-            .question-card { padding: 12px 12px; border-radius: 28px; }
-            .options-area { gap: 8px; padding: 8px 6px; }
-            .option-btn { padding: 6px 10px; font-size: 0.78rem; min-width: 90px; flex: 1 0 40%; }
-            .answer-block { padding: 8px 20px; min-width: 140px; font-size: 0.82rem; }
-            .question-text { font-size: 0.92rem; }
-            .hero { padding: 6px 12px; }
-            .title-box h1 { font-size: 1.35rem; }
-        }
-        @media (max-width: 420px) {
-            .option-btn { min-width: 75px; font-size: 0.72rem; padding: 6px 8px; }
-            .story-title { font-size: 1.18rem; }
-            .answer-block { padding: 7px 16px; min-width: 125px; }
+        ::-webkit-scrollbar { width: 5px; }
+        @media (max-width: 700px) {
+            .story-list { width: 220px; }
+            .detail-panel { padding: 1rem; }
+            .detail-title { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
-<div class="deco deco1">🧸✨</div>
-<div class="deco deco2">📖⭐</div>
-<div class="deco deco3">🐣🌈</div>
-
-<div class="container">
-    <div class="hero">
-        <div class="title-box">
-            <h1>⭐ 阅读小英雄 ⭐</h1>
-            <p>📱 210题全收录 → 点选项答题，戳答案区显示/隐藏</p>
-        </div>
-        <div class="tips">
-            <span>🌈</span> 勇敢试一试！
+<div class="app-header">
+    <h1> 故事深解 · 完整记忆馆</h1>
+    </div>
+<div class="main-container">
+    <div class="story-list">
+        <div class="story-list-inner" id="storyListContainer"></div>
+    </div>
+    <div class="detail-panel" id="detailPanel">
+        <div class="detail-card" id="detailContent">
+            <div style="text-align:center; margin-top:3rem; opacity:0.6;">
+                <div style="font-size:2.5rem;">🎧📚</div>
+                <p>点击左侧故事</p>
+            </div>
         </div>
     </div>
-
-    <div id="quiz-root"></div>
-
-    <div class="action-bar">
-        <button class="reset-btn" id="resetAllBtn">✨ 再来一次 ✨</button>
-    </div>
-    <footer>🌟 共20个故事 · 210道趣味题目 🌟</footer>
 </div>
 
 <script>
-    // =============================================================
-    // 完整题库 20个故事 总计210题 (与原始要求100%匹配)
-    // =============================================================
-    const storiesData = [
-        { name: "🎨 神笔马良 · 神笔一挥", items: [
-            { text: "马良是个怎样的孩子？", options: ["A. 懒惰贪玩", "B. 勤劳善良", "C. 自私自利"], answer: "B" },
-            { text: "马良小时候最大的愿望是什么？", options: ["A. 吃好吃的", "B. 有一支笔学画画", "C. 去远方"], answer: "B" },
-            { text: "马良没有笔时，用什么在地上画画？", options: ["A. 手指、木炭、草根", "B. 石头、沙子", "C. 树枝、树叶"], answer: "A" },
-            { text: "送马良神笔的是谁？", options: ["A. 皇帝", "B. 白胡须老人", "C. 财主"], answer: "B" },
-            { text: "神笔有什么神奇之处？", options: ["A. 画什么都能变成真的", "B. 能发光", "C. 能写字"], answer: "A" },
-            { text: "马良用神笔先画了什么帮助穷人？", options: ["A. 金银珠宝", "B. 耕牛、水车、犁", "C. 房子"], answer: "B" },
-            { text: "贪心的财主想抢神笔，让马良画什么？", options: ["A. 粮食", "B. 金山", "C. 衣服"], answer: "B" },
-            { text: "财主把马良关起来，马良画什么逃了出去？", options: ["A. 大门", "B. 梯子", "C. 小鸟"], answer: "B" },
-            { text: "皇帝听说神笔后，把马良抓去让他画什么？", options: ["A. 摇钱树", "B. 宫殿", "C. 士兵"], answer: "A" },
-            { text: "马良被皇帝逼迫时，表现得很？", options: ["A. 害怕", "B. 勇敢", "C. 顺从"], answer: "B" },
-            { text: "马良用神笔没画过的是？", options: ["A. 汽车", "B. 耕牛", "C. 水车"], answer: "A" },
-            { text: "马良一开始学画画的地方是？", options: ["A. 学堂", "B. 家里", "C. 野外"], answer: "C" },
-            { text: "财主和皇帝的共同点是？", options: ["A. 贪心", "B. 善良", "C. 勇敢"], answer: "A" },
-            { text: "马良对待神笔的态度是？", options: ["A. 好好使用帮助他人", "B. 随意使用", "C. 藏起来不用"], answer: "A" },
-            { text: "马良画金山时，把金山画在了？", options: ["A. 海里", "B. 山上", "C. 平原"], answer: "A" },
-            { text: "皇帝去取金山时，马良画了什么？", options: ["A. 大风大浪", "B. 小船", "C. 桥梁"], answer: "A" },
-            { text: "故事的结局，马良？", options: ["A. 继续为穷人画画", "B. 被皇帝抓住", "C. 放弃神笔"], answer: "A" },
-            { text: "这个故事告诉我们要？", options: ["A. 善良勇敢、不贪财", "B. 贪婪自私", "C. 胆小怕事"], answer: "A" },
-            { text: "马良画画的本领是？", options: ["A. 天生就会", "B. 刻苦练习得来", "C. 神笔赋予"], answer: "B" },
-            { text: "文中没有出现的人物是？", options: ["A. 老师", "B. 财主", "C. 皇帝"], answer: "A" }
-        ]},
-        { name: "❄️ 四季赞歌 · 雪天", items: [
-            { text: "《雪天》故事发生在什么季节？", options: ["A. 春天", "B. 夏天", "C. 冬天"], answer: "C" },{ text: "坊村的雪覆盖了哪些地方？", options: ["A. 屋顶、地面", "B. 只有树上", "C. 只有河边"], answer: "A" },{ text: "坊村下雪后，小动物们会？", options: ["A. 躲在家里", "B. 出门玩耍", "C. 迁徙南方"], answer: "B" },{ text: "《雪天》里 \"我\" 记得雪天的什么？", options: ["A. 美食", "B. 趣事", "C. 风景"], answer: "B" },{ text: "文中 \"坊村\" 的 \"坊\" 读音是？", options: ["A.fāng", "B.fáng", "C.fǎng"], answer: "A" },{ text: "雪下得大时，天地间是什么样子？", options: ["A. 灰蒙蒙", "B. 白茫茫", "C. 金灿灿"], answer: "B" },{ text: "雪天里，人们出门会？", options: ["A. 穿单薄衣服", "B. 穿厚棉袄", "C. 打遮阳伞"], answer: "B" },{ text: "文中描写雪的句子没有提到？", options: ["A. 雪的颜色", "B. 雪的厚度", "C. 雪的味道"], answer: "C" },{ text: "\"我\" 对雪天的感受是？", options: ["A. 讨厌", "B. 喜欢", "C. 无所谓"], answer: "B" },{ text: "坊村的雪是？", options: ["A. 薄薄一层", "B. 厚厚一片", "C. 只有山顶有"], answer: "B" }
-        ]},
-        { name: "🐒 小猴的新房子", items: [
-            { text: "小猴盖新房子是为了？", options: ["A. 自己住", "B. 招待朋友", "C. 存放食物"], answer: "A" },{ text: "小猴盖房主要用什么材料？", options: ["A. 石头", "B. 树枝", "C. 泥土"], answer: "B" },{ text: "小猴盖房遇到的困难是？", options: ["A. 没有工具", "B. 材料不够", "C. 天气太热"], answer: "B" },{ text: "小猴的新房子最后怎么样？", options: ["A. 塌了", "B. 很坚固", "C. 被风吹走"], answer: "B" },{ text: "小猴盖房得到谁的帮助？", options: ["A. 小鸟", "B. 小熊", "C. 没有帮助"], answer: "C" },{ text: "小猴一开始盖的房子？", options: ["A. 很完美", "B. 有漏洞", "C. 很大"], answer: "B" },{ text: "小猴是一只怎样的猴子？", options: ["A. 勤劳能干", "B. 懒惰笨拙", "C. 自私自利"], answer: "A" },{ text: "新房子建好后，小猴的心情？", options: ["A. 难过", "B. 开心", "C. 平静"], answer: "B" },{ text: "小猴的新房子适合什么季节住？", options: ["A. 春天", "B. 夏天", "C. 冬天"], answer: "C" },{ text: "文中没有提到小猴盖房时的？", options: ["A. 动作", "B. 心情", "C. 外貌"], answer: "C" }
-        ]},
-        { name: "🌳 大树爷爷和小鸟", items: [
-            { text: "大树爷爷为小鸟提供？", options: ["A. 食物", "B. 家", "C. 玩具"], answer: "B" },{ text: "小鸟遇到困难时大树爷爷会？", options: ["A. 不理睬", "B. 帮助它", "C. 赶走它"], answer: "B" },{ text: "大树爷爷和小鸟的关系是？", options: ["A. 敌人", "B. 朋友", "C. 陌生人"], answer: "B" },{ text: "小鸟会为大树爷爷做什么？", options: ["A. 唱歌", "B. 浇水", "C. 施肥"], answer: "A" },{ text: "大树爷爷的叶子有什么作用？", options: ["A. 遮风挡雨", "B. 装饰好看", "C. 没有作用"], answer: "A" },{ text: "小鸟在大树爷爷身上做什么？", options: ["A. 筑巢", "B. 睡觉", "C. 玩耍"], answer: "A" },{ text: "大树爷爷老了，小鸟会？", options: ["A. 离开", "B. 陪伴", "C. 嘲笑"], answer: "B" },{ text: "这个故事告诉我们要？", options: ["A. 互相帮助", "B. 独自生活", "C. 索取回报"], answer: "A" },{ text: "文中的大树爷爷很？", options: ["A. 冷漠", "B. 热心", "C. 胆小"], answer: "B" },{ text: "小鸟的歌声让大树爷爷觉得？", options: ["A. 吵闹", "B. 开心", "C. 疲惫"], answer: "B" }
-        ]},
-        { name: "👨 爸爸到过的地方", items: [
-            { text: "《爸爸到过的地方》爸爸去过的地方是？", options: ["A. 城市", "B. 海边", "C. 山区"], answer: "C" },{ text: "爸爸到过的地方有什么特点？", options: ["A. 繁华", "B. 宁静", "C. 危险"], answer: "B" },{ text: "爸爸到过的地方让 \"我\" 觉得？", options: ["A. 失望", "B. 自豪", "C. 害怕"], answer: "B" },{ text: "爸爸去那个地方是为了？", options: ["A. 旅游", "B. 工作", "C. 探亲"], answer: "B" },{ text: "文中 \"我\" 对爸爸的情感是？", options: ["A. 敬佩", "B. 嫌弃", "C. 害怕"], answer: "A" },{ text: "爸爸到过的地方环境？", options: ["A. 优美", "B. 恶劣", "C. 普通"], answer: "B" },{ text: "\"我\" 希望以后能？", options: ["A. 和爸爸一起去", "B. 永远不去", "C. 让爸爸回来"], answer: "A" },{ text: "爸爸在那里做的事情很？", options: ["A. 轻松", "B. 辛苦", "C. 无聊"], answer: "B" },{ text: "文中没有描写爸爸的？", options: ["A. 外貌", "B. 工作", "C. 心情"], answer: "A" },{ text: "这个故事体现了？", options: ["A. 父爱", "B. 友情", "C. 师生情"], answer: "A" }
-        ]},
-        { name: "🏹 老猎人的故事", items: [
-            { text: "《老猎人的故事》老猎人最后？", options: ["A. 继续打猎", "B. 放下猎枪", "C. 搬家离开"], answer: "B" },{ text: "老猎人为什么改变想法？", options: ["A. 动物太可怜", "B. 打猎太累", "C. 没人支持"], answer: "A" },{ text: "老猎人以前是个怎样的人？", options: ["A. 善良", "B. 残忍", "C. 胆小"], answer: "B" },{ text: "老猎人遇到了什么动物改变了他？", options: ["A. 小鹿", "B. 小鸟", "C. 小熊"], answer: "A" },{ text: "老猎人放下猎枪后会？", options: ["A. 保护动物", "B. 继续伤害动物", "C. 无所事事"], answer: "A" },{ text: "故事中动物的表现让猎人觉得？", options: ["A. 愤怒", "B. 愧疚", "C. 开心"], answer: "B" },{ text: "老猎人的故事发生在？", options: ["A. 森林", "B. 沙漠", "C. 城市"], answer: "A" },{ text: "这个故事告诉我们要？", options: ["A. 爱护动物", "B. 勇敢打猎", "C. 远离森林"], answer: "A" },{ text: "老猎人打猎是为了？", options: ["A. 生存", "B. 娱乐", "C. 炫耀"], answer: "A" },{ text: "文中动物的情感是？", options: ["A. 恐惧", "B. 愤怒", "C. 友好"], answer: "A" }
-        ]},
-        { name: "🌺 英雄树唱歌", items: [
-            { text: "《英雄树唱歌》英雄树指的是？", options: ["A. 松树", "B. 木棉树", "C. 柳树"], answer: "B" },{ text: "英雄树生长在什么地方？", options: ["A. 北方", "B. 南方", "C. 西方"], answer: "B" },{ text: "英雄树的花是什么颜色？", options: ["A. 白色", "B. 黄色", "C. 红色"], answer: "C" },{ text: "英雄树象征着？", options: ["A. 美丽", "B. 勇敢", "C. 柔软"], answer: "B" },{ text: "故事中英雄树会？", options: ["A. 结果", "B. 唱歌", "C. 跳舞"], answer: "B" },{ text: "人们为什么喜欢英雄树？", options: ["A. 花好看", "B. 象征精神", "C. 能遮阴"], answer: "B" },{ text: "英雄树的树干？", options: ["A. 纤细", "B. 粗壮", "C. 弯曲"], answer: "B" },{ text: "《英雄树唱歌》传递的情感是？", options: ["A. 悲伤", "B. 敬佩", "C. 平淡"], answer: "B" },{ text: "英雄树适合生长的环境？", options: ["A. 寒冷", "B. 温暖", "C. 干燥"], answer: "B" },{ text: "故事中英雄树代表？", options: ["A. 英雄人物", "B. 普通植物", "C. 神秘力量"], answer: "A" }
-        ]},
-        { name: "🧚 仙女的海滩", items: [
-            { text: "《仙女的海滩》海滩上有什么特别的东西？", options: ["A. 贝壳", "B. 仙女", "C. 宝石"], answer: "B" },{ text: "仙女的海滩让 \"我\" 感觉？", options: ["A. 害怕", "B. 神奇", "C. 无聊"], answer: "B" },{ text: "在仙女的海滩可以？", options: ["A. 捡贝壳", "B. 见仙女", "C. 堆沙子"], answer: "B" },{ text: "《仙女的海滩》是一个什么故事？", options: ["A. 真实", "B. 童话", "C. 历史"], answer: "B" },{ text: "仙女的海滩在？", options: ["A. 梦里", "B. 现实", "C. 远方"], answer: "A" },{ text: "海滩上的沙子是什么样子？", options: ["A. 粗糙", "B. 细腻", "C. 坚硬"], answer: "B" },{ text: "仙女的海滩周围有？", options: ["A. 海浪", "B. 高山", "C. 沙漠"], answer: "A" },{ text: "\"我\" 在海滩上的心情？", options: ["A. 难过", "B. 愉悦", "C. 紧张"], answer: "B" },{ text: "文中没有描写海滩的？", options: ["A. 颜色", "B. 声音", "C. 气味"], answer: "C" },{ text: "这个故事体现了孩子的？", options: ["A. 想象力", "B. 记忆力", "C. 观察力"], answer: "A" }
-        ]},
-        { name: "🍦 冰激凌火箭", items: [
-            { text: "《冰激凌火箭》火箭是用什么做的？", options: ["A. 金属", "B. 冰激凌", "C. 木头"], answer: "B" },{ text: "冰激凌火箭能飞到？", options: ["A. 太空", "B. 山顶", "C. 海边"], answer: "A" },{ text: "冰激凌火箭融化后会？", options: ["A. 变成雨水", "B. 消失", "C. 变成糖果"], answer: "A" },{ text: "谁乘坐了冰激凌火箭？", options: ["A. 小朋友", "B. 大人", "C. 动物"], answer: "A" },{ text: "冰激凌火箭的味道？", options: ["A. 苦涩", "B. 香甜", "C. 无味"], answer: "B" },{ text: "火箭的形状像？", options: ["A. 圆锥", "B. 正方体", "C. 球体"], answer: "A" },{ text: "乘坐火箭时的感觉？", options: ["A. 害怕", "B. 刺激", "C. 平静"], answer: "B" },{ text: "冰激凌火箭的颜色？", options: ["A. 单一", "B. 多彩", "C. 透明"], answer: "B" },{ text: "故事发生在什么季节？", options: ["A. 春天", "B. 夏天", "C. 冬天"], answer: "B" },{ text: "这个故事充满了？", options: ["A. 幻想", "B. 真实", "C. 悲伤"], answer: "A" }
-        ]},
-        { name: "🧤 两只棉手套", items: [
-            { text: "《两只棉手套》能住几只小松鼠？", options: ["A.3 只", "B.5 只", "C.7 只"], answer: "B" },{ text: "小松鼠们住棉手套时？", options: ["A. 很挤", "B. 很宽敞", "C. 很冷"], answer: "A" },{ text: "《两只棉手套》体现了？", options: ["A. 分享", "B. 自私", "C. 浪费"], answer: "A" },{ text: "棉手套是谁的？", options: ["A. 松鼠妈妈", "B. 小朋友", "C. 猎人"], answer: "B" },{ text: "小松鼠们在手套里做什么？", options: ["A. 睡觉", "B. 玩耍", "C. 找食物"], answer: "A" },{ text: "冬天里棉手套能给松鼠？", options: ["A. 温暖", "B. 凉爽", "C. 食物"], answer: "A" },{ text: "棉手套的材质是？", options: ["A. 棉布", "B. 塑料", "C. 金属"], answer: "A" },{ text: "故事发生在什么季节？", options: ["A. 春天", "B. 夏天", "C. 冬天"], answer: "C" },{ text: "小松鼠们对棉手套的感受？", options: ["A. 喜欢", "B. 讨厌", "C. 无所谓"], answer: "A" },{ text: "这个故事告诉我们要？", options: ["A. 乐于助人", "B. 独自占有", "C. 浪费资源"], answer: "A" }
-        ]},
-        { name: "🐉 喷火龙", items: [
-            { text: "《喷火龙》喷火是为了？", options: ["A. 取暖", "B. 吓唬人", "C. 做饭"], answer: "A" },{ text: "喷火龙最后？", options: ["A. 被打败", "B. 和大家做朋友", "C. 离开"], answer: "B" },{ text: "喷火龙一开始被大家？", options: ["A. 喜欢", "B. 害怕", "C. 忽视"], answer: "B" },{ text: "喷火龙的性格变化是？", options: ["A. 坏变好", "B. 好变坏", "C. 没变化"], answer: "A" },{ text: "喷火龙生活在？", options: ["A. 森林", "B. 沙漠", "C. 海洋"], answer: "A" },{ text: "大家一开始对喷火龙的态度？", options: ["A. 友好", "B. 恐惧", "C. 热情"], answer: "B" },{ text: "喷火龙喷火时的样子？", options: ["A. 可怕", "B. 可爱", "C. 平淡"], answer: "A" },{ text: "是什么让大家接受了喷火龙？", options: ["A. 善良的心", "B. 强大的力量", "C. 美丽的外表"], answer: "A" },{ text: "喷火龙会帮助大家？", options: ["A. 取暖", "B. 灭火", "C. 找食物"], answer: "A" },{ text: "这个故事告诉我们？", options: ["A. 不能以貌取人", "B. 外表重要", "C. 远离奇怪的人"], answer: "A" }
-        ]},
-        { name: "📚 课桌椅游行", items: [
-            { text: "《课桌椅游行》课桌椅为什么游行？", options: ["A. 被虐待", "B. 想搬家", "C. 想玩耍"], answer: "A" },{ text: "课桌椅游行后大家？", options: ["A. 爱护它们", "B. 继续破坏", "C. 不理睬"], answer: "A" },{ text: "同学们以前对课桌椅？", options: ["A. 爱护", "B. 破坏", "C. 无视"], answer: "B" },{ text: "课桌椅游行时的心情？", options: ["A. 开心", "B. 委屈", "C. 愤怒"], answer: "B" },{ text: "课桌椅希望大家？", options: ["A. 珍惜它们", "B. 丢弃它们", "C. 改造它们"], answer: "A" },{ text: "游行的课桌椅有？", options: ["A. 桌子", "B. 椅子", "C. 两者都有"], answer: "C" },{ text: "课桌椅被破坏的表现？", options: ["A. 划痕、破损", "B. 干净、整洁", "C. 崭新、漂亮"], answer: "A" },{ text: "故事发生在？", options: ["A. 家里", "B. 学校", "C. 公园"], answer: "B" },{ text: "同学们最后明白了？", options: ["A. 要爱护公物", "B. 可以随意破坏", "C. 公物不重要"], answer: "A" },{ text: "这个故事的主题是？", options: ["A. 爱护公物", "B. 团结友爱", "C. 努力学习"], answer: "A" }
-        ]},
-        { name: "🐊 鳄鱼的眼泪", items: [
-            { text: "《鳄鱼的眼泪》是真的伤心吗？", options: ["A. 是", "B. 不是", "C. 不一定"], answer: "B" },{ text: "鳄鱼流眼泪是为了？", options: ["A. 排出盐分", "B. 表达难过", "C. 吸引猎物"], answer: "A" },{ text: "鳄鱼生活在？", options: ["A. 沙漠", "B. 水里", "C. 高山"], answer: "B" },{ text: "鳄鱼的外表看起来很？", options: ["A. 温和", "B. 凶猛", "C. 可爱"], answer: "B" },{ text: "鳄鱼的眼泪常被用来形容？", options: ["A. 假慈悲", "B. 真伤心", "C. 开心"], answer: "A" },{ text: "鳄鱼是？", options: ["A. 哺乳动物", "B. 爬行动物", "C. 鸟类"], answer: "B" },{ text: "鳄鱼的食物是？", options: ["A. 植物", "B. 小动物", "C. 石头"], answer: "B" },{ text: "文中解释鳄鱼流泪的原因是？", options: ["A. 科学知识", "B. 童话故事", "C. 民间传说"], answer: "A" },{ text: "鳄鱼的眼睛？", options: ["A. 很大", "B. 很小", "C. 看不见"], answer: "B" },{ text: "这个故事让我们了解了？", options: ["A. 动物知识", "B. 历史故事", "C. 做人道理"], answer: "A" }
-        ]},
-        { name: "🐦 小鸟学飞", items: [
-            { text: "《小鸟学飞》第一次飞会？", options: ["A. 成功", "B. 失败", "C. 放弃"], answer: "B" },{ text: "小鸟学飞得到谁的帮助？", options: ["A. 妈妈", "B. 爸爸", "C. 朋友"], answer: "A" },{ text: "小鸟学会飞后感觉？", options: ["A. 害怕", "B. 开心", "C. 疲惫"], answer: "B" },{ text: "小鸟学飞时的心情？", options: ["A. 紧张", "B. 轻松", "C. 难过"], answer: "A" },{ text: "小鸟的翅膀一开始？", options: ["A. 有力", "B. 无力", "C. 受伤"], answer: "B" },{ text: "小鸟学飞时会遇到？", options: ["A. 困难", "B. 顺利", "C. 危险"], answer: "A" },{ text: "鸟妈妈对小鸟的态度？", options: ["A. 鼓励", "B. 批评", "C. 无视"], answer: "A" },{ text: "小鸟学会飞后能？", options: ["A. 找食物", "B. 躲避危险", "C. 两者都能"], answer: "C" },{ text: "这个故事告诉我们？", options: ["A. 坚持就能成功", "B. 放弃很容易", "C. 依赖他人"], answer: "A" },{ text: "小鸟学飞的季节是？", options: ["A. 春天", "B. 夏天", "C. 秋天"], answer: "A" }
-        ]},
-        { name: "🐾 雪地上的脚印", items: [
-            { text: "《雪地上的脚印》是谁留下的？", options: ["A. 小狗", "B. 小猫", "C. 小鸟"], answer: "A" },{ text: "雪地上的脚印能看出？", options: ["A. 动物大小", "B. 动物速度", "C. 动物年龄"], answer: "A" },{ text: "雪地上的脚印形状像？", options: ["A. 梅花", "B. 枫叶", "C. 圆形"], answer: "A" },{ text: "下雪后地面会变得？", options: ["A. 干净", "B. 脏乱", "C. 坚硬"], answer: "A" },{ text: "脚印会随着时间？", options: ["A. 消失", "B. 变深", "C. 变大"], answer: "A" },{ text: "雪地上除了动物脚印还有？", options: ["A. 人的脚印", "B. 植物的痕迹", "C. 没有其他"], answer: "A" },{ text: "雪的颜色是？", options: ["A. 白色", "B. 灰色", "C. 蓝色"], answer: "A" },{ text: "下雪的季节是？", options: ["A. 春天", "B. 夏天", "C. 冬天"], answer: "C" },{ text: "从脚印可以判断动物？", options: ["A. 走过的方向", "B. 年龄", "C. 性别"], answer: "A" },{ text: "这个故事体现了自然的？", options: ["A. 奇妙", "B. 可怕", "C. 普通"], answer: "A" }
-        ]},
-        { name: "🌸 第一次的茉莉", items: [
-            { text: "《第一次的茉莉》茉莉的特点？", options: ["A. 很香", "B. 很大", "C. 很多刺"], answer: "A" },{ text: "第一次闻到茉莉会觉得？", options: ["A. 刺鼻", "B. 清香", "C. 无味"], answer: "B" },{ text: "茉莉的颜色是？", options: ["A. 红色", "B. 黄色", "C. 白色"], answer: "C" },{ text: "茉莉开放在？", options: ["A. 春天", "B. 夏天", "C. 秋天"], answer: "B" },{ text: "茉莉的花朵？", options: ["A. 很大", "B. 很小", "C. 中等"], answer: "B" },{ text: "文中 \"我\" 对茉莉的感受？", options: ["A. 喜欢", "B. 讨厌", "C. 无所谓"], answer: "A" },{ text: "茉莉的叶子是？", options: ["A. 绿色", "B. 黄色", "C. 红色"], answer: "A" },{ text: "茉莉生长在？", options: ["A. 花盆里", "B. 水里", "C. 沙漠"], answer: "A" },{ text: "第一次见茉莉的场景很？", options: ["A. 难忘", "B. 普通", "C. 难过"], answer: "A" },{ text: "这个故事描写了茉莉的？", options: ["A. 香味", "B. 味道", "C. 触感"], answer: "A" }
-        ]},
-        { name: "🌙 一个晚上的故事", items: [
-            { text: "《一个晚上的故事》发生在？", options: ["A. 白天", "B. 晚上", "C. 清晨"], answer: "B" },{ text: "那个晚上发生了什么特别的事？", options: ["A. 做梦", "B. 奇遇", "C. 生病"], answer: "B" },{ text: "故事让 \"我\" 学会了？", options: ["A. 勇敢", "B. 分享", "C. 独立"], answer: "A" },{ text: "《一个晚上的故事》主角是？", options: ["A. 小朋友", "B. 动物", "C. 植物"], answer: "A" },{ text: "经历故事后 \"我\" 有什么变化？", options: ["A. 更胆小", "B. 更懂事", "C. 更调皮"], answer: "B" },{ text: "晚上的环境很？", options: ["A. 安静", "B. 吵闹", "C. 明亮"], answer: "A" },{ text: "\"我\" 在晚上遇到了？", options: ["A. 陌生人", "B. 小动物", "C. 没有遇到"], answer: "B" },{ text: "故事的氛围是？", options: ["A. 紧张", "B. 温馨", "C. 悲伤"], answer: "B" },{ text: "\"我\" 对晚上的看法改变了？", options: ["A. 是", "B. 否", "C. 不确定"], answer: "A" },{ text: "这个故事体现了孩子的？", options: ["A. 成长", "B. 懒惰", "C. 调皮"], answer: "A" }
-        ]},
-        { name: "🐘 长鼻子和短鼻子", items: [
-            { text: "《长鼻子和短鼻子》它们因为什么争吵？", options: ["A. 鼻子长短", "B. 食物多少", "C. 房子大小"], answer: "A" },{ text: "长鼻子和短鼻子最后？", options: ["A. 和好", "B. 绝交", "C. 打架"], answer: "A" },{ text: "长鼻子的优点是？", options: ["A. 够得远", "B. 跑得快", "C. 跳得高"], answer: "A" },{ text: "短鼻子的优点是？", options: ["A. 灵活", "B. 有力气", "C. 会唱歌"], answer: "A" },{ text: "长鼻子和短鼻子学会了？", options: ["A. 欣赏对方", "B. 嘲笑对方", "C. 远离对方"], answer: "A" },{ text: "它们是什么动物？", options: ["A. 大象", "B. 小猪", "C. 小狗"], answer: "A" },{ text: "争吵时它们的心情？", options: ["A. 开心", "B. 生气", "C. 平静"], answer: "B" },{ text: "和好后它们会？", options: ["A. 互相帮助", "B. 继续争吵", "C. 互不搭理"], answer: "A" },{ text: "这个故事告诉我们？", options: ["A. 每个人都有优点", "B. 要嘲笑别人", "C. 要争输赢"], answer: "A" },{ text: "长鼻子和短鼻子的关系是？", options: ["A. 朋友", "B. 敌人", "C. 陌生人"], answer: "A" }
-        ]},
-        { name: "🏃 夸父逐日", items: [
-            { text: "《夸父逐日》夸父追日是为了？", options: ["A. 好玩", "B. 留住太阳", "C. 寻找食物"], answer: "B" },{ text: "夸父最后变成了？", options: ["A. 大山", "B. 大海", "C. 大树"], answer: "A" },{ text: "夸父追日体现了？", options: ["A. 坚持", "B. 懒惰", "C. 胆小"], answer: "A" },{ text: "夸父喝光了？", options: ["A. 河水", "B. 海水", "C. 雨水"], answer: "A" },{ text: "《夸父逐日》是？", options: ["A. 神话", "B. 童话", "C. 真实故事"], answer: "A" },{ text: "太阳的特点是？", options: ["A. 很热", "B. 很冷", "C. 很暗"], answer: "A" },{ text: "夸父追日的过程很？", options: ["A. 轻松", "B. 艰难", "C. 无聊"], answer: "B" },{ text: "夸父是一个怎样的人？", options: ["A. 勇敢执着", "B. 胆小懦弱", "C. 自私自利"], answer: "A" },{ text: "夸父追日没有成功但他的精神？", options: ["A. 值得学习", "B. 不值得学习", "C. 无所谓"], answer: "A" },{ text: "故事中夸父的工具是？", options: ["A. 拐杖", "B. 弓箭", "C. 马车"], answer: "A" }
-        ]},
-        { name: "🐦 幸福鸟", items: [
-            { text: "《幸福鸟》能带来？", options: ["A. 财富", "B. 幸福", "C. 权力"], answer: "B" },{ text: "幸福鸟住在哪里？", options: ["A. 高山", "B. 深海", "C. 森林"], answer: "A" },{ text: "找到幸福鸟需要？", options: ["A. 勇气", "B. 运气", "C. 财富"], answer: "A" },{ text: "幸福鸟的羽毛是？", options: ["A. 彩色", "B. 白色", "C. 黑色"], answer: "A" },{ text: "得到幸福鸟的祝福会？", options: ["A. 永远幸福", "B. 暂时幸福", "C. 没有变化"], answer: "A" },{ text: "寻找幸福鸟的人很？", options: ["A. 勇敢", "B. 胆小", "C. 懒惰"], answer: "A" },{ text: "幸福鸟的叫声很？", options: ["A. 动听", "B. 刺耳", "C. 普通"], answer: "A" },{ text: "故事中幸福鸟很？", options: ["A. 善良", "B. 凶狠", "C. 冷漠"], answer: "A" },{ text: "寻找幸福鸟的路上会遇到？", options: ["A. 困难", "B. 顺利", "C. 危险"], answer: "A" },{ text: "这个故事告诉我们？", options: ["A. 幸福要靠努力争取", "B. 幸福会自动到来", "C. 幸福不存在"], answer: "A" }
-        ]}
-    ];
+// ===================== 完整21篇故事数据（基于两份文档逐篇核对）=====================
+const storiesData = [
+    { id:1, title:"雪天", author:"郭风", mainRoles:"“我”、爸爸、松坊村的孩子们", coreAction:"“我”在松坊村经历雪天，爸爸用龙眼核为雪人做眼睛，温馨回忆铭刻心中。", relationships:"“我”与爸爸是父子；与村里孩子为玩伴关系。", plot:"十一月中旬“我”和家人到松坊村，远山先落雪；十二月底村里下了小雪，荞麦仍开花、紫云英长绿叶；在松坊村过第一个春节次日，村里下大雪，“我”出门见四处积雪，孩子们打雪仗、堆雪人；爸爸默默站在“我”身后，提醒雪人无眼，取来福州带来的龙眼干分给孩子，用龙眼核做雪人的眼睛；这段雪天经历成为“我”难忘的回忆。", moral:"怀念童年在松坊村的美好雪天，歌颂亲情温暖与淳朴乡村之美。", questions:[{q:"“我”和家人是何时来到松坊村的？",a:"十一月中旬的一天。"},{q:"松坊村的初雪有怎样的特点？",a:"很小，夹着小雨，稀疏雪花落地即化。"},{q:"松坊村下大雪是在什么时间？",a:"在松坊村过的第一个春节次日。"},{q:"“我”出门后看到哪些地方铺满了雪？",a:"山坡上、溪中岩石上、桥上、屋前小径和菜地篱笆上。"},{q:"松坊村的孩子们在雪天做了什么？",a:"打雪仗、堆雪人。"},{q:"爸爸指出了雪人的什么问题？",a:"雪人没有眼睛。"},{q:"爸爸用什么给雪人做了眼睛？",a:"从福州带来的龙眼干里的龙眼核。"},{q:"龙眼干是从哪里带来的？",a:"福州。"},{q:"初雪时村里的梯田有哪些生机植物？",a:"荞麦还在开花，紫云英发着苍郁的绿叶。"},{q:"为什么这段雪天经历让“我”难以忘记？",a:"因为充满了童趣和爸爸温暖的陪伴。"}] },
+    { id:2, title:"小猴的新房子", author:"樊发稼", mainRoles:"小猴、小象、小牛、小熊、小金钱豹、小狗、小羊等", coreAction:"狂风摧毁小猴房子，动物朋友们齐心盖新房，新房桃树柱结桃，小猴生日用桃子宴请好友。", relationships:"小猴与众多动物是好朋友，互助同伴。", plot:"小猴住在大青山下桃树林边，狂风刮倒桃树、吹烂小猴房子，小猴伤心后决心盖新房；众好友闻讯赶来，分别带来建材、工具，齐心合力半天盖好宽敞亮堂的新房；春天，新房的八根桃树干柱子发芽长成桃树，开满桃花后结出桃子；小猴舍不得吃桃，在生日当天邀请好友，采摘桃子招待大家，众人开心庆祝。", moral:"赞美团结互助的友谊，付出终有美好回报。", questions:[{q:"小猴的房子建在什么地方？",a:"大青山下桃树林边。"},{q:"摧毁小猴房子的是什么？",a:"可怕的狂风。"},{q:"小猴失去房子后做了什么决定？",a:"决心再盖一间新房子。"},{q:"小象为盖新房带来了什么？",a:"砖瓦。"},{q:"大家用什么做了新房的柱子？",a:"从刮倒的桃树林砍来的八根大桃树干。"},{q:"盖好新房用了多长时间？",a:"不到半天。"},{q:"春天新房的柱子发生了什么变化？",a:"发芽长成了桃树，开满桃花并结桃子。"},{q:"小猴用什么方式邀请好友？",a:"买大红纸写请柬分别送给朋友。"},{q:"小猴为什么要邀请好朋友来家里？",a:"既是庆祝生日，也是感谢大家的帮助。"},{q:"小猴用什么招待来庆祝的好友？",a:"从八棵桃树上采摘的大桃子。"}] },
+    { id:3, title:"大树爷爷和小鸟", author:"徐鲁", mainRoles:"大树爷爷、红嘴巴小鸟、蓝翅膀小鸟、花脖子小鸟等", coreAction:"大树爷爷如守护者，万千小鸟飞来栖息，夜晚小鸟们温柔道晚安。", relationships:"大树爷爷是栖息守护者，小鸟们是陪伴者。", plot:"有一棵老得像爷爷的大树，树根枝条如长胡须，风儿、小雨、阳光温柔环绕它；红嘴巴、蓝翅膀、花脖子小鸟先后飞来和大树爷爷打招呼；日复一日，成千上万的小鸟从远方飞来，大树爷爷敞开怀抱迎接；小鸟们在大树爷爷身上唱歌、梳毛、练飞、做窝、养育宝宝；夜晚来临，小鸟们纷纷向大树爷爷道晚安、送祝福。", moral:"展现自然间相互依存的美好，赞美和谐与爱。", questions:[{q:"为什么把大树称作“大树爷爷”？",a:"因为它很老很老，树根枝条像长胡须。"},{q:"大树爷爷的树根和枝条像什么？",a:"长长的胡须。"},{q:"第一个打招呼的小鸟是什么样子？",a:"红嘴巴小鸟。"},{q:"小鸟们是从哪里飞来的？",a:"从很远很远的地方。"},{q:"大树爷爷对小鸟们做了什么？",a:"敞开怀抱迎接它们。"},{q:"小鸟们做窝的目的是什么？",a:"养育自己的鸟宝宝。"},{q:"小鸟们什么时候安静睡觉？",a:"金色的月亮升起的时候。"},{q:"小鸟们夜晚对大树爷爷的祝福？",a:"晚安哟，大树爷爷，祝你做一个美丽的梦。"},{q:"小鸟们在大树爷爷身上做了哪些事？",a:"唱歌、梳羽毛、做早操、练飞翔、做窝、养育宝宝。"},{q:"大树爷爷和小鸟们是怎样的关系？",a:"相互陪伴、相互依存，温暖守护关系。"}] },
+    { id:4, title:"爸爸到过的地方", author:"徐鲁", mainRoles:"“我”、妈妈、爸爸、小羊", coreAction:"“我”和妈妈追寻爸爸足迹，到熊猫家乡、长江三峡、草原、北京，最终与爸爸团聚。", relationships:"亲子关系，爸爸是建设者。", plot:"妈妈给“我”戴小花帽，“我”和小羊道别后，与妈妈坐火车去看爸爸；母女俩先到大熊猫的家乡，这里是爸爸到过的地方；接着经过长江、三峡大坝，此处也留过爸爸的足迹；随后乘飞机看到辽阔草原，草原也是爸爸到过的地方；最后到北京天安门广场，看解放军叔叔升五星红旗，这里同样是爸爸到过的地方；“我”呼喊爸爸，爸爸跑来搂住母女俩，“我”看到爸爸和同事们亲手建造的高楼。", moral:"思念爸爸，赞美祖国建设者，热爱大好河山。", questions:[{q:"“我”和妈妈出门的目的是什么？",a:"去看爸爸。"},{q:"妈妈为“我”出门做了什么准备？",a:"戴上了一顶漂亮的小花帽。"},{q:"首先乘坐的交通工具？",a:"火车。"},{q:"母女俩到的第一个地方是？",a:"大熊猫的家乡。"},{q:"乘坐飞机看到了什么？",a:"好美、好大的草原。"},{q:"最终到达的地方是哪里？",a:"北京天安门广场。"},{q:"在天安门广场看到了什么？",a:"解放军叔叔升五星红旗。"},{q:"父女相见时爸爸的反应？",a:"大笑着搂住妈妈和我。"},{q:"最后看到了爸爸的什么成果？",a:"爸爸和叔叔们亲手建造的高高楼房。"},{q:"母女俩的寻亲之旅坐了哪几种交通工具？",a:"火车、轮船、飞机。"}] },
+    { id:5, title:"老猎人的故事", author:"徐鲁", mainRoles:"老猎人、森林动物", coreAction:"老猎人坚守原则，专打凶恶动物、保护弱小，老去后动物们四处寻找他。", relationships:"老猎人是弱小动物的守护者，动物们敬重他。", plot:"无儿无女的老猎人一辈子在森林打猎，与其他贪婪猎人不同，他坚守原则：专打凶恶残暴的动物，绝不伤害弱小善良生灵，也不向怀孕或带宝宝的动物妈妈开枪，还会为缺食物的动物妈妈留猎物；森林动物们敬重这位好心的老猎人，甚至会为他指点凶恶动物的位置；岁月流逝，老猎人年迈体衰，跑不动、举不起枪，只好依依不舍离开森林，住在村中小屋，床头挂着心爱的猎枪，每晚梦到森林动物；森林里的动物们不知老猎人离开，四处寻找他，如同寻找失踪的亲人。", moral:"歌颂善良、有原则，人与动物和谐互敬。", questions:[{q:"老猎人的家庭状况？",a:"无儿无女，单身一人。"},{q:"老猎人一辈子以什么为生？",a:"在森林里打猎。"},{q:"他的打猎原则？",a:"专打凶恶残暴动物，不伤害弱小善良生灵，不向怀孕或带宝宝的动物妈妈开枪。"},{q:"动物们对老猎人的态度？",a:"十分爱他、崇敬他，把他当朋友。"},{q:"动物们怎样帮助他？",a:"引导他哪里有凶恶的家伙危害森林。"},{q:"老猎人年迈后身体问题？",a:"跑不动，举不起猎枪，瞄不准目标。"},{q:"离开森林后住到哪里？",a:"森林外面的一座小村庄。"},{q:"每晚做梦梦见什么？",a:"狮子和老虎花纹，或母鹿带着小鹿饮水。"},{q:"动物们找不到老猎人后做了什么？",a:"互相询问，四处寻找，像寻找失踪亲人。"},{q:"老猎人身上最可贵的品质？",a:"善良、有职业道德、尊重生命。"}] },
+    { id:6, title:"英雄树唱歌", author:"黄庆云", mainRoles:"小孩子、木棉树、蝴蝶、太阳", coreAction:"木棉种子长成大树，渴望光明，信守承诺为人类带来棉絮与花朵，成为英雄树。", relationships:"木棉树是人类的挚友，孩子种下它。", plot:"蝴蝶带来木棉种子，孩子种下；木棉为争取光明拼命长高超过众树；拒绝蝴蝶飞翔邀约，开花结絮送棉絮做枕头、落花治病；成为“英雄树”，广州市花。", moral:"赞美执着向上、无私奉献的英雄品质，人与自然相依。", questions:[{q:"木棉种子如何来到南方？",a:"一只美丽的蝴蝶粘着它飞到南方。"},{q:"孩子种在哪里？",a:"在大树中间的地里挖洞种下。"},{q:"木棉树拼命向上长的原因？",a:"要争取光明。"},{q:"太阳为木棉做了什么？",a:"把光明给它，让它像箭一样上蹿。"},{q:"老榕树取笑木棉什么？",a:"取笑它开红花，不够尊严。"},{q:"木棉开红花的目的是？",a:"做春天的信使，像火炬举起温暖。"},{q:"蝴蝶提出什么邀请？",a:"邀请木棉一起飞翔追求自由。"},{q:"木棉为什么拒绝？",a:"曾经许下诺言成为人类的好朋友。"},{q:"人们叫它什么树？",a:"英雄树。"},{q:"它被选为哪个城市的市花？",a:"广州。"}] },
+    { id:7, title:"仙女的海滩", author:"安武林", mainRoles:"小仙女、寄居蟹、海龟、树籽", coreAction:"小仙女唤醒海滩生灵，寄居蟹等追寻仙女足迹后在脚窝等待失去生命，仙女悲伤。", relationships:"仙女是唤醒者，三生灵是追寻者。", plot:"小仙女住在开满兰花的幽静山谷，每年春天采集露珠，走过的地方兰花绽放；她每年去一次海边，日出前将露珠洒进大海，大海用朝霞染红她的白衣服，她在海滩开心奔跑；小仙女的白衣服被海风刮得像小旗帜，唤醒了沙滩上的寄居蟹、海龟、树籽；三者被“旗帜”召唤，朝着小仙女的方向前行，到达时小仙女已离开，只留下一串脚窝；三者把脚窝当成家，依次住进去等待小仙女，整整睡了一个冬天；第二年春天，小仙女再次来到海滩，发现脚窝处的小树枯萎、海龟倒下、寄居蟹碎裂，她满心悲伤；此后小仙女依旧在山谷采集露珠，她走过的地方，兰花开出朝霞般的颜色。", moral:"美好追寻酿成悲剧，惋惜生命，珍惜美好。", questions:[{q:"小仙女住在什么地方？",a:"幽静的山谷，开满兰花。"},{q:"每年春天早晨做什么？",a:"采集草叶上的露珠。"},{q:"每年去海边几次？",a:"一次。"},{q:"大海为小仙女做什么？",a:"用朝霞把她的白衣服染成最漂亮颜色。"},{q:"白衣服像什么？",a:"一面小小的旗帜。"},{q:"沙滩上哪些生命被唤醒？",a:"寄居蟹、海龟、树籽。"},{q:"三者把什么当成了家？",a:"小仙女留下的脚窝。"},{q:"等待持续多久？",a:"整个冬天。"},{q:"再次来到海滩看到什么悲剧？",a:"小树枯萎，大海龟倒下，寄居蟹干瘪碎裂。"},{q:"此后山谷兰花有何变化？",a:"开出的兰花有着像朝霞一样的颜色。"}] },
+    { id:8, title:"冰激凌火箭", author:"常福生", mainRoles:"儿童城小朋友、太阳公公、总指挥", coreAction:"小朋友因酷热无法开联欢会，制作冰激凌火箭送太阳降温，成功举办联欢会。", relationships:"小朋友与太阳是求助与帮助；总指挥最终支持孩子梦想。", plot:"夏天酷热难耐，儿童城小朋友因天气无法举办联欢会，向太阳公公请求降温；太阳公公表示自己在发烧，天上无医生，小朋友们提议请它吃冰激凌；因距离太远太阳公公吃不到，一个小朋友想出制作冰激凌火箭送太空的主意；小朋友们齐心做好火箭，运到航天中心，总指挥起初拒绝发射；小朋友们恳求总指挥，秘书提醒“孩子的事第一重要”，总指挥最终同意；小朋友们回儿童城看直播，冰激凌火箭成功发射，飞进太阳公公嘴里；太阳公公吃后体温降低，地面变凉快，儿童城联欢会顺利举行，小朋友们邀请总指挥和秘书当贵宾，还给太阳公公送了请帖。", moral:"展现儿童想象力创造力，成人对童心的支持，童真温暖。", questions:[{q:"小朋友为什么发愁？",a:"天太热，无法举办联欢会唱歌跳舞。"},{q:"太阳公公为什么不能降温？",a:"自己发烧，需要退热。"},{q:"小朋友想出什么办法？",a:"请太阳公公吃冰激凌降温。"},{q:"为送冰激凌制作了什么？",a:"冰激凌火箭。"},{q:"总指挥最初态度？",a:"摇头，拒绝发射奇怪火箭。"},{q:"谁的提醒让他改变主意？",a:"秘书提醒‘孩子们的事第一重要’。"},{q:"在哪里看火箭发射？",a:"儿童城电视机前。"},{q:"冰激凌火箭的结果？",a:"飞进太阳公公的大嘴巴里。"},{q:"太阳公公吃了冰激凌后？",a:"体温降低，地面变凉快。"},{q:"联欢会邀请了谁当贵宾？",a:"航天中心总指挥和秘书。"}] },
+    { id:9, title:"两只棉手套", author:"金波", mainRoles:"松鼠爸爸、松鼠妈妈、五只小松鼠、小男孩", coreAction:"松鼠一家在棉手套中安家，松鼠爸爸风雪守护，小男孩发现后留下另一只手套。", relationships:"松鼠父子亲情，小男孩善良帮助。", plot:"寒冬西北风肆虐，松鼠妈妈即将生产，却无避风之所，松鼠爸爸焦急寻找树洞，先后被大黑熊、小刺猬占据；风雪变大，松鼠妈妈愁得想哭，松鼠爸爸继续寻找，脚冻麻也不在意，最终在雪地上发现一只棉手套；松鼠爸爸让松鼠妈妈钻进手套，松鼠妈妈很快生下五只小松鼠，小松鼠们住进手套的五个指头；松鼠爸爸因手套狭小，卧在外面用大尾巴取暖、挡风雪，冻得发僵也不离开；小男孩前来寻找丢失的棉手套，得知松鼠一家的情况后，毫不犹豫脱下另一只棉手套放在地上，默默离开；松鼠爸爸表示明年春天要将棉手套送还小男孩，小松鼠们也表示长大后一同前往。", moral:"歌颂父爱无私与小男孩的善良，人与动物相互温暖。", questions:[{q:"故事发生的季节？",a:"冬天，西北风刮个不停。"},{q:"松鼠妈妈面临的紧急情况？",a:"要生小娃娃了，没避风地方。"},{q:"松鼠爸爸找到的树洞被谁占据？",a:"大黑熊和小刺猬。"},{q:"最终找到什么避风？",a:"一只棉手套。"},{q:"松鼠妈妈生了几只小松鼠？",a:"五只。"},{q:"五只小松鼠住进哪里？",a:"棉手套的五个指头。"},{q:"松鼠爸爸为什么没进去？",a:"里面太挤，他在外面挡风雪。"},{q:"松鼠爸爸在外面做了什么？",a:"用大尾巴堵住手套口，冻得发僵也不离开。"},{q:"小男孩发现后做了什么？",a:"脱下另一只棉手套放在地上，不声不响走了。"},{q:"松鼠爸爸承诺什么？",a:"明年春天要把棉手套送还小男孩。"}] },
+    { id:10, title:"喷嚏龙", author:"冰波", mainRoles:"喷嚏龙、松鼠大夫、各店主", coreAction:"喷嚏龙鼻孔长草不停打喷嚏，唯松鼠大夫无私医治，病愈后店主们不再理他。", relationships:"店主想利用喷嚏龙，松鼠大夫真心帮助。", plot:"南瓜村商业街的店主们都善于招揽生意，喷嚏龙来到商业街，因鼻孔长草不停打喷嚏、冒呛人烟，打算去医院看病；黑猫先生、烟囱店老板纷纷招揽喷嚏龙，被拒绝后被烟喷倒；肉店花豹先生邀请喷嚏龙打喷嚏熏腊肉，豆腐店果狸太太邀请它打喷嚏带动风车磨豆腐，均被喷嚏龙以要看病拒绝；松鼠大夫出现，带喷嚏龙去医院检查，发现其鼻孔里长了一棵草，用钳子拔草时，喷嚏龙打了一个大喷嚏，将松鼠大夫喷到山的那边；许久后松鼠大夫浑身乌黑、衣服破烂地回来，却表示不要医药费，治好病便开心；喷嚏龙十分感动，送了一颗夜光龙珠给松鼠大夫；喷嚏龙病愈后，商业街店主们不再招揽它，还对它翻白眼。", moral:"批判唯利是图，赞扬无私奉献的医者仁心。", questions:[{q:"喷嚏龙来商业街状态？",a:"不停打喷嚏，鼻孔冒呛人烟。"},{q:"目的？",a:"想去医院看病。"},{q:"黑猫先生推荐什么？",a:"口罩。"},{q:"花豹先生邀请做什么？",a:"打喷嚏熏腊肉。"},{q:"谁帮助了喷嚏龙？",a:"松鼠大夫。"},{q:"不停打喷嚏原因？",a:"鼻孔里长了一棵草。"},{q:"松鼠大夫收医药费吗？",a:"不要钱，治好病就高兴。"},{q:"喷嚏龙送了什么礼物？",a:"一颗夜里发绿光的龙珠。"},{q:"店主们之后的态度？",a:"不再招揽它，还翻白眼。"},{q:"故事说明什么道理？",a:"真心助人比唯利是图更可贵。"}] },
+    { id:11, title:"课桌椅游行", author:"民间故事", mainRoles:"课桌椅、讲台、校长、同学们", coreAction:"课桌椅被损坏后游行抗议，让损坏公物的同学站着上课。", relationships:"课桌椅是教学用具，讲台是领头者。", plot:"深夜课桌椅开会控诉刀痕、腿坏；讲台提议游行；天刚亮课桌椅列队高呼口号；校长老师惊讶；同学认领课桌椅，损坏严重的无人敢认，最终被送去修理，损坏者站着上课。", moral:"爱护公共财物，损坏公物需承担责任。", questions:[{q:"开会时间？",a:"深夜学校静悄悄时。"},{q:"损坏表现有哪些？",a:"小刀划刻、刻字，椅子腿扭坏。"},{q:"谁提出游行？",a:"高高的讲台。"},{q:"口号是什么？",a:"抗议对我们的损害！我们需要爱护！"},{q:"校长老师们第一反应？",a:"十分惊讶，上前劝阻。"},{q:"同学如何让课桌椅回教室？",a:"走到课桌椅前说‘请你跟我去上课吧’。"},{q:"认不出自己的课桌椅怎么办？",a:"课桌椅会自动打招呼‘哎，我在这里’。"},{q:"留下什么样的课桌椅？",a:"有小刀刻画、扭坏腿等被损坏的。"},{q:"送去了哪里？",a:"木工间修理。"},{q:"损坏课桌椅的同学惩罚？",a:"站着上课。"}] },
+    { id:12, title:"鳄鱼的眼泪", author:"民间故事", mainRoles:"鳄鱼、水牛、麻雀、八哥、动物学家", coreAction:"鳄鱼吃水牛时流泪，麻雀八哥指责虚伪，动物学家解释是排盐生理现象。", relationships:"鳄鱼捕食水牛，动物学家科普者。", plot:"炎热的夏天，水牛到水塘乘凉，被突然蹿出的鳄鱼扑倒咬死；鳄鱼嚼食水牛时，一边吃一边哗哗流眼泪；麻雀和八哥看到后，指责鳄鱼虚伪、是伪君子；鳄鱼听到指责后感到委屈，解释自己绝不虚伪，让麻雀和八哥去问动物学家流泪的原因；麻雀和八哥为弄清真相，找到动物学家；动物学家科普：鳄鱼肾发育不完全，无法通过肾排盐，眼睛下的腺体可帮助排盐，张嘴吃东西时眼部肌肉牵动，腺体排盐，看起来就像流泪一样。", moral:"看问题不能只看表面，避免误解。", questions:[{q:"故事季节天气？",a:"炎热的夏天。"},{q:"水牛到水塘目的？",a:"凉快一下。"},{q:"鳄鱼捕食时奇怪现象？",a:"边吃边哗哗流眼泪。"},{q:"麻雀八哥评价？",a:"虚伪，伪君子，大坏蛋。"},{q:"鳄鱼心情？",a:"委屈。"},{q:"鳄鱼让它们问谁？",a:"动物学家。"},{q:"鳄鱼生理结构不同点？",a:"肾发育不完全。"},{q:"靠什么排盐？",a:"眼睛下的腺体。"},{q:"什么情况下流泪？",a:"张嘴吃东西时眼部肌肉牵动，腺体排盐。"},{q:"鳄鱼的眼泪其实是？",a:"排出多余盐分的生理现象。"}] },
+    { id:13, title:"小鸟学飞", author:"徐鲁", mainRoles:"小鸟、鸟妈妈、萤火虫、小草小花小云朵", coreAction:"小鸟学飞得到自然万物夸赞，夜晚妈妈守护，萤火虫道晚安，期待明天继续学飞。", relationships:"母爱温暖，自然鼓励者。", plot:"风儿轻吹，小鸟飞过草地、山坡、树林、天空，小草小花小树小云朵纷纷夸赞；太阳落山飞累回家，妈妈用软草羽毛铺被，做新衣裳；萤火虫提灯路过道晚安，小鸟期待第二天太阳升起。", moral:"成长路上有鼓励与爱，充满希望。", questions:[{q:"小鸟是在什么样的环境下开始学飞的？",a:"风儿轻轻吹。"},{q:"小鸟学飞时第一个飞过的地方是什么？",a:"绿绿的草地。"},{q:"哪些自然万物夸赞了小鸟？",a:"小草、小花、小树、小云朵。"},{q:"小鸟在什么时候感到疲惫停止学飞？",a:"太阳落山时。"},{q:"谁在家门口等着小鸟回家？",a:"鸟妈妈。"},{q:"鸟妈妈用什么为小鸟铺了被窝？",a:"最柔软的小草和羽毛。"},{q:"鸟妈妈在小鸟睡觉的时候做了什么？",a:"给小鸟做一套新衣裳。"},{q:"夜晚路过小鸟家的小生命是什么？",a:"一只小小的萤火虫。"},{q:"萤火虫向小鸟说了什么祝福的话？",a:"晚安哟，小鸟！"},{q:"小鸟对第二天有什么期待？",a:"太阳早早升起，唤醒自己继续学飞。"}] },
+    { id:14, title:"雪地上的脚印", author:"鲁冰", mainRoles:"小公鸡、小花鸭、小黄狗、小红马、猫头鹰", coreAction:"大雪后小动物们以为怪兽脚印，结伴探险，最终猫头鹰揭示脚印就是他们自己留下的。", relationships:"伙伴互相壮胆，猫头鹰是解谜者。", plot:"大雪后小公鸡看到老槐树像怪兽，听到树洞声响，回头发现竹叶脚印，吓得滚下山坡；依次与小花鸭、小黄狗、小红马结伴，每次听到不同声音、看到更多脚印越发恐惧；最后手拉手鼓起勇气，发现树洞里是猫头鹰；猫头鹰告知脚印是它们自己在雪地上留下的，并邀请一起探险。", moral:"恐惧源于内心想象，团结勇敢才能战胜恐惧。", questions:[{q:"大雪后小公鸡看到什么像怪兽的东西？",a:"远方的老槐树。"},{q:"小公鸡走向老槐树时听到了什么声音？",a:"呜——呜——的打呼噜声。"},{q:"小公鸡看到的脚印像什么形状？",a:"竹叶般的脚印。"},{q:"第一个加入小公鸡队伍的是谁？",a:"小花鸭。"},{q:"小黄狗加入后，三人看到了几种脚印？",a:"竹叶般、枫叶般两种脚印。"},{q:"最后加入队伍的小伙伴是谁？",a:"小红马。"},{q:"四人走到老槐树旁看到了什么？",a:"树洞里一双绿莹莹的眼睛。"},{q:"四人是怎样给自己打气的？",a:"手拉手挺直身子说‘勇敢一点！’"},{q:"树洞里的绿莹莹眼睛其实是谁的？",a:"猫头鹰。"},{q:"雪地上的脚印其实是谁留下的？",a:"它们自己在雪地上留下的脚印。"}] },
+    { id:15, title:"第一次的茉莉", author:"泰戈尔", mainRoles:"我", coreAction:"看到白茉莉勾起孩提时第一次捧茉莉的甜蜜回忆，纵有诸多快乐，童年回忆最珍贵。", relationships:"独白回忆。", plot:"白茉莉花让我想起第一次双手满捧白茉莉的童年；回忆日光天空、河水声、夕阳迎我；虽有宴会大笑、吟诗、爱人花环，但童年捧茉莉的甜蜜永远难忘。", moral:"童年美好初次体验是一生最珍贵的珍藏。", questions:[{q:"是什么勾起了“我”的童年回忆？",a:"白的茉莉花。"},{q:"“我”童年时第一次与茉莉的互动是什么？",a:"双手满捧着这些白的茉莉花。"},{q:"“我”喜爱的自然景物有哪些？",a:"日光、天空、绿色的大地。"},{q:"“我”在黑夜里仿佛听到了什么声音？",a:"河水淙淙的流声。"},{q:"作者用什么比喻描写夕阳迎接“我”？",a:"如新妇揭起面纱迎接她的爱人。"},{q:"“我”在节日宴会的晚上有过怎样的经历？",a:"跟着说笑话的人大笑。"},{q:"灰暗的雨天早晨“我”做了什么事？",a:"吟哦过许多飘逸的诗篇。"},{q:"这篇文章的线索是什么？",a:"白茉莉花。"},{q:"白茉莉花在文中象征着什么？",a:"童年纯真与甜蜜回忆。"},{q:"文章主要抒发了“我”怎样的情感？",a:"深切怀念孩提时代的美好时光。"}] },
+    { id:16, title:"一个晚上的故事", author:"严文井", mainRoles:"小姐姐、铅笔、橡皮、文具盒、台灯等", coreAction:"小姐姐丢三落四，文具们深夜抱怨，梦中听见后起床收拾改正。", relationships:"文具与使用者的关系，月亮旁观。", plot:"小姐姐晚上做自习，到九点半后，不顾还有一道题没做，直接去睡觉，桌上文具乱七八糟，台灯未关、窗子未开；文具们又冷又睡不着，聚在一起聊天抱怨：铅笔笔尖秃了未被削，橡皮累得又瘦又矮，圆规、三角板等都曾为小姐姐出力却被遗忘；文具盒谦虚认为是自己的问题，被其他文具反驳；部分文具指责小姐姐丢三落四，圆规和台灯则客观评价小姐姐有优点但不够细心；小姐姐在梦中听到文具们的抱怨，立刻起床，将文具收进文具盒、放进书包，关上窗子和台灯；窗外的月亮看到小姐姐的改变，满心欢喜，欲言又止留下悬念。", moral:"养成细心、爱护物品的好习惯，知错能改。", questions:[{q:"小姐姐是在几点钟去睡觉的？",a:"九点半。"},{q:"小姐姐去睡觉前有什么事没做完？",a:"还有一道题没做。"},{q:"文具们睡不着的原因是什么？",a:"台灯亮着，窗子开着，又冷又亮。"},{q:"铅笔为什么会抱怨小姐姐？",a:"笔尖秃了没被削，帮她画了好多画和字。"},{q:"橡皮的身体出现了什么变化？",a:"累得又瘦又矮。"},{q:"文具盒认为小姐姐忘记大家的原因是什么？",a:"可能是因为自己（文具盒）没有多大用。"},{q:"谁认为小姐姐其实有自己的优点？",a:"圆规和台灯。"},{q:"小姐姐是怎样听到文具们的抱怨的？",a:"在做梦中听见。"},{q:"小姐姐醒来后做了哪些改正的行为？",a:"把文具收进文具盒放进书包，关窗关台灯。"},{q:"窗外的月亮看到小姐姐的改变后心情如何？",a:"高兴地说‘好啊！不过你们还要……’留下悬念。"}] },
+    { id:17, title:"长鼻子和短鼻子", author:"野军", mainRoles:"小象、小猪、象妈妈、猪妈妈、熊大夫", coreAction:"小象小猪打架滚成泥团，妈妈们认错孩子闹乌龙，掉进池塘洗净后和好。", relationships:"玩伴与母子关系。", plot:"小象和小猪为抢一只花皮球扭打在一起，滚进泥水沟后变成浑身漆黑的大泥团；两人哭着回家，象妈妈错把小猪当成小象，以为小象的长鼻子被拉短，猪妈妈错把小象当成小猪，以为小猪的短鼻子被拉长；两位妈妈十分着急，拉着“孩子”去医院找熊大夫；熊大夫被吵得头晕，提出割下小象的长鼻子缝到小猪鼻子上的方案，小象和小猪吓得哇哇大叫，逃出医院；熊大夫在后追赶，小象和小猪拼命逃跑时掉进清清的小池塘，洗干净了身上的泥巴，恢复了原本的样子；象妈妈和猪妈妈赶来，发现孩子的鼻子恢复正常，熊大夫见状傻了眼，小象和小猪也明白以后不能再打架。", moral:"朋友之间要和睦相处，不能争抢打闹。", questions:[{q:"小象和小猪为什么扭打在一起？",a:"为了抢一只花皮球。"},{q:"两人滚进了什么地方，变成了什么样子？",a:"滚进泥水沟，变成两个大泥团儿。"},{q:"象妈妈错把谁当成了自己的孩子？",a:"错把小猪当成小象。"},{q:"猪妈妈误以为小猪的鼻子出了什么问题？",a:"以为小猪的短鼻子被拉长了。"},{q:"两位妈妈带着“孩子”去了哪里？",a:"医院找熊大夫。"},{q:"熊大夫提出了怎样的治疗方案？",a:"割下小象的长鼻子缝到小猪鼻子上。"},{q:"小象和小猪听到方案后做了什么？",a:"吓得哇哇叫，逃出医院。"},{q:"两人逃跑时掉进了什么地方？",a:"小池塘。"},{q:"小池塘的水帮了小象和小猪什么忙？",a:"洗掉了全身泥巴，恢复原本模样。"},{q:"这次经历后小象和小猪明白了什么道理？",a:"以后再也不打架啦，不然鼻子出问题就糟了。"}] },
+    { id:18, title:"夸父逐日", author:"神话故事", mainRoles:"夸父", coreAction:"夸父为光明追逐太阳，口渴倒下，手杖化为桃林造福后人。", relationships:"独自追逐太阳的巨人。", plot:"夸父厌恶黑暗热爱光明，决心追日固定天空；拿着手杖像风奔跑，追到隅谷；极度口渴喝干黄河渭水，奔向大泽途中倒下，奋力抛出手杖；次日手杖化为鲜果累累的桃林，为追寻光明的人解渴。", moral:"歌颂执着追求、英勇无畏、为理想献身的伟大精神。", questions:[{q:"夸父为什么想要追赶太阳？",a:"不喜欢黑暗，喜欢光明，想让大地永远充满光明。"},{q:"夸父追逐太阳时手里拿着什么？",a:"手杖。"},{q:"作者用什么比喻形容夸父的奔跑速度？",a:"像风似的奔跑，一眨眼就跑了两千里。"},{q:"太阳落下的地方叫什么名字？",a:"隅谷。"},{q:"夸父追上太阳后身体出现了什么状况？",a:"喉咙干得直冒烟，太渴太累。"},{q:"夸父为了解渴喝干了哪两条河流的水？",a:"黄河、渭河。"},{q:"夸父接下来想去哪里喝水？",a:"北方的大泽（瀚海）。"},{q:"夸父最终到达大泽了吗？",a:"没有，还没到大泽就像大山颓然倒下。"},{q:"夸父临终前做了什么动作？",a:"把手杖奋力向前一抛。"},{q:"夸父的手杖最终变成了什么？",a:"一片枝叶茂密、鲜果累累的桃林。"}] },
+    { id:19, title:"幸福鸟", author:"民间故事", mainRoles:"旺嘉、黑胡子妖怪、黄胡子妖怪、白胡子妖怪、幸福鸟", coreAction:"旺嘉勇闯三关寻找幸福鸟，为家乡带来幸福。", relationships:"旺嘉是寻福者，妖怪是阻碍，幸福鸟是赐福神鸟。", plot:"从前有一个地方环境恶劣，没有河流、田地和花草，人们吃不饱、穿不暖，都盼望得到幸福；人们都说幸福是一只美丽的鸟儿，住在遥远的东方，飞到哪里，哪里就有幸福；孩子旺嘉为了让大家获得幸福，独自离开家乡去寻找幸福鸟；旺嘉来到雪山脚下，遇到黑胡子妖怪，妖怪将道路变成锋利的乱石滩，旺嘉赤脚走过，双脚被割破仍坚持前行；接着遇到黄胡子妖怪，妖怪让他失去干粮，眼前变成大沙漠，旺嘉忍饥挨饿走出沙漠；又遇到白胡子妖怪，妖怪让旺嘉失明，旺嘉用手摸索着爬到雪山顶，终于见到幸福鸟；幸福鸟用翅膀抚摸旺嘉，让他眼睛复明、伤口痊愈，旺嘉骑着幸福鸟飞回故乡；从此，旺嘉的家乡有了河流、田地、花草，人们过上了幸福的生活。", moral:"幸福需要勇敢无畏、坚持不懈去争取，无私奉献终得美好。", questions:[{q:"旺嘉的家乡有什么特点？",a:"没有河流和田地，没有小鸟鲜花，没有树木青草，人们吃不饱穿不暖。"},{q:"人们把对幸福的期盼寄托在了什么身上？",a:"幸福鸟。"},{q:"旺嘉离开家乡的目的是什么？",a:"寻找幸福鸟，让大家得到幸福。"},{q:"旺嘉遇到的第一个妖怪是谁？",a:"黑胡子妖怪。"},{q:"黑胡子妖怪为旺嘉设置了什么难关？",a:"将平坦道路变成乱石滩，石头锋利如刀。"},{q:"黄胡子妖怪让旺嘉失去了什么？",a:"干粮袋飞走，眼前变成大沙漠，找不到食物。"},{q:"白胡子妖怪对旺嘉做了什么？",a:"吹胡子让旺嘉眼睛看不见。"},{q:"旺嘉最终在什么地方见到了幸福鸟？",a:"雪山顶。"},{q:"幸福鸟用什么方式帮助了旺嘉？",a:"用翅膀轻轻抚摸，让眼睛重见光明，身上的伤也好了。"},{q:"幸福鸟来到旺嘉家乡后，家乡发生了什么变化？",a:"清清的河水流过绿色田地，阳光照耀大地，到处有鲜花、欢唱小鸟、高大树木和茂盛青草。"}] }
+];
 
-    // 验证总数: 神笔马良20 + 其余19个故事各10题 = 20 + 190 = 210题
-    let answerVisibleMap = new Map();
+const allStories = storiesData;
 
-    function renderApp() {
-        const root = document.getElementById('quiz-root');
-        let html = '';
-        for (let sIdx = 0; sIdx < storiesData.length; sIdx++) {
-            const story = storiesData[sIdx];
-            html += `<div class="story-section"><div class="story-title">${story.name}</div>`;
-            for (let qIdx = 0; qIdx < story.items.length; qIdx++) {
-                const q = story.items[qIdx];
-                const qid = `q_${sIdx}_${qIdx}`;
-                if (!answerVisibleMap.has(qid)) answerVisibleMap.set(qid, false);
-                
-                let optsHtml = '';
-                q.options.forEach(opt => {
-                    const optLetter = opt.charAt(0);
-                    optsHtml += `<button class="option-btn" data-qid="${qid}" data-value="${optLetter}">${opt}</button>`;
-                });
-                
-                html += `
-                    <div class="question-card" id="card-${qid}">
-                        <div class="question-text"><span class="q-num">${qIdx+1}</span> ${q.text}</div>
-                        <div class="options-area" id="opts-${qid}">
-                            ${optsHtml}
-                        </div>
-                        <div class="feedback-msg" id="fb-${qid}"></div>
-                        <div class="answer-zone">
-                            <div class="answer-block" data-qid="${qid}" data-answer="${q.answer}">📖 点击显示答案</div>
-                        </div>
-                    </div>
-                `;
-            }
-            html += `</div>`;
-        }
-        root.innerHTML = html;
+// 语音引擎
+let selectedVoice = null;
+let availableVoices = [];
 
-        // 绑定选项点击
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const qid = btn.getAttribute('data-qid');
-                const selectedVal = btn.getAttribute('data-value');
-                const answerBlock = document.querySelector(`.answer-block[data-qid="${qid}"]`);
-                const correctAnswer = answerBlock ? answerBlock.getAttribute('data-answer') : '';
-                const feedbackDiv = document.getElementById(`fb-${qid}`);
-                const parentOpts = document.getElementById(`opts-${qid}`);
-                if(parentOpts) {
-                    parentOpts.querySelectorAll('.option-btn').forEach(opt => {
-                        opt.classList.remove('option-correct-feedback', 'option-wrong-feedback');
-                    });
-                }
-                if(selectedVal === correctAnswer) {
-                    btn.classList.add('option-correct-feedback');
-                    feedbackDiv.innerHTML = '🎉 哇！回答正确！ 你真棒！ 🎉';
-                    feedbackDiv.className = 'feedback-msg feedback-correct';
-                } else {
-                    btn.classList.add('option-wrong-feedback');
-                    let correctText = '';
-                    if(parentOpts) {
-                        const btns = parentOpts.querySelectorAll('.option-btn');
-                        for(let b of btns) {
-                            if(b.getAttribute('data-value') === correctAnswer) {
-                                correctText = b.innerText;
-                                break;
-                            }
-                        }
-                    }
-                    feedbackDiv.innerHTML = `🤔 再想想～ 正确答案是 ${correctAnswer}. ${correctText.replace(correctAnswer+'.','')} 继续加油哟！`;
-                    feedbackDiv.className = 'feedback-msg feedback-wrong';
-                }
+function loadVoices() {
+    return new Promise((resolve) => {
+        const update = () => {
+            const voices = window.speechSynthesis.getVoices();
+            const chinese = voices.filter(v => v.lang.includes('zh') || v.name.includes('Chinese') || v.name.includes('Xiaoxiao') || v.name.includes('Yaoyao'));
+            const order = ['Xiaoxiao', 'Yaoyao', 'Xiaoyi', 'Tingting', 'Meijia', 'Google'];
+            chinese.sort((a,b) => {
+                let ai = order.findIndex(s => a.name.includes(s));
+                let bi = order.findIndex(s => b.name.includes(s));
+                if(ai===-1) ai=999;
+                if(bi===-1) bi=999;
+                return ai-bi;
             });
-        });
+            availableVoices = chinese;
+            resolve(availableVoices);
+        };
+        let v = window.speechSynthesis.getVoices();
+        if(v.length) update();
+        else window.speechSynthesis.onvoiceschanged = update;
+    });
+}
 
-        // 绑定答案区块 (显示/隐藏)
-        document.querySelectorAll('.answer-block').forEach(block => {
-            block.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const qid = block.getAttribute('data-qid');
-                const correctAnsLetter = block.getAttribute('data-answer');
-                const isVisible = answerVisibleMap.get(qid) || false;
-                
-                if (!isVisible) {
-                    let fullAnswerText = correctAnsLetter;
-                    const parentCard = document.getElementById(`card-${qid}`);
-                    if(parentCard) {
-                        const optBtns = parentCard.querySelectorAll('.option-btn');
-                        for(let opt of optBtns) {
-                            if(opt.getAttribute('data-value') === correctAnsLetter) {
-                                fullAnswerText = opt.innerText;
-                                break;
-                            }
-                        }
-                    }
-                    block.innerHTML = `✅ 答案：${fullAnswerText} ✅`;
-                    block.classList.add('answer-show-style');
-                    answerVisibleMap.set(qid, true);
-                } else {
-                    block.innerHTML = '📖 点击显示答案';
-                    block.classList.remove('answer-show-style');
-                    answerVisibleMap.set(qid, false);
-                }
-            });
-        });
+function speakSweet(text, btn) {
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "zh-CN";
+    utter.rate = 0.85;
+    utter.pitch = 1.2;
+    if(selectedVoice) utter.voice = selectedVoice;
+    else if(availableVoices[0]) utter.voice = availableVoices[0];
+    if(btn) {
+        const old = btn.innerHTML;
+        btn.innerHTML = "🎤 播放中...";
+        btn.classList.add("playing");
+        utter.onend = () => { btn.innerHTML = old; btn.classList.remove("playing"); };
+        utter.onerror = () => { btn.innerHTML = old; btn.classList.remove("playing"); };
     }
+    window.speechSynthesis.speak(utter);
+}
 
-    function resetAll() {
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.classList.remove('option-correct-feedback', 'option-wrong-feedback');
+function testVoice() {
+    speakSweet("你好，我来讲个故事~", null);
+}
+
+function renderSidebar() {
+    const container = document.getElementById("storyListContainer");
+    container.innerHTML = '';
+    allStories.forEach(story => {
+        const div = document.createElement("div");
+        div.className = "story-item";
+        div.innerHTML = `<span>${story.title}</span>`;
+        div.addEventListener("click", () => {
+            document.querySelectorAll(".story-item").forEach(el => el.classList.remove("active"));
+            div.classList.add("active");
+            renderDetail(story);
         });
-        document.querySelectorAll('.feedback-msg').forEach(fb => {
-            fb.innerHTML = '';
-            fb.className = 'feedback-msg';
-        });
-        document.querySelectorAll('.answer-block').forEach(block => {
-            block.innerHTML = '📖 点击显示答案';
-            block.classList.remove('answer-show-style');
-            const qid = block.getAttribute('data-qid');
-            answerVisibleMap.set(qid, false);
-        });
+        container.appendChild(div);
+    });
+    if(allStories.length) {
+        document.querySelector(".story-item")?.classList.add("active");
+        renderDetail(allStories[0]);
     }
+}
 
-    renderApp();
-    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+function renderDetail(story) {
+    const container = document.getElementById("detailContent");
+    if(!container) return;
+    const qHtml = story.questions.map((item,idx) => `
+        <div class="q-item">
+            <div class="q-question">${idx+1}. ${item.q}</div>
+            <div class="q-answer">${item.a}</div>
+        </div>
+    `).join('');
+    const btnId = `speak-${story.id}-${Date.now()}`;
+    const html = `
+        <div class="voice-bar">
+            <label>🎤 甜美音色：</label>
+            <select id="voiceSelectGlobal">
+                <option value="">✨ 选个声音</option>
+                ${availableVoices.map(v => `<option value="${v.name}">${v.name}</option>`).join('')}
+            </select>
+            <button class="test-voice-btn" id="testVoiceBtn">🔊 试听</button>
+            <span class="voice-status">💖 音调甜美</span>
+        </div>
+        <div class="detail-card">
+            <div class="detail-title">${story.title}</div>
+            <div class="detail-meta">
+                <span class="meta-tag">✍️ ${story.author}</span>
+                <span class="meta-tag">🎭 ${story.mainRoles}</span>
+            </div>
+            <div class="section"><h3>🎯 角色核心行为</h3><p>${story.coreAction}</p></div>
+            <div class="section"><h3>🤝 角色关系</h3><p>${story.relationships}</p></div>
+            <div class="section">
+                <h3>📜 故事讲了什么 <button class="speech-btn" id="${btnId}">🎧 播放</button></h3>
+                <p>${story.plot}</p>
+            </div>
+            <div class="section"><h3>🌟 故事告诉我们什么</h3><p>${story.moral}</p></div>
+            <div class="section key-questions">
+                <details open><summary>🔑 10个关键问题+点击问题显示答案</summary>
+                <div class="question-grid">${qHtml}</div></details>
+            </div>
+            <div class="footer-note">✨ 点击任意问题展开答案</div>
+        </div>
+    `;
+    container.innerHTML = html;
+    
+    const sel = document.getElementById("voiceSelectGlobal");
+    if(sel) sel.addEventListener("change", (e) => {
+        const name = e.target.value;
+        if(name) selectedVoice = availableVoices.find(v => v.name === name);
+        else selectedVoice = null;
+    });
+    const testBtn2 = document.getElementById("testVoiceBtn");
+    if(testBtn2) testBtn2.addEventListener("click", testVoice);
+    const speakBtn = document.getElementById(btnId);
+    if(speakBtn) speakBtn.addEventListener("click", () => speakSweet(story.plot, speakBtn));
+    
+    document.querySelectorAll(".q-item").forEach(el => {
+        el.addEventListener("click", () => el.classList.toggle("open"));
+    });
+}
+
+loadVoices().then(() => {
+    if(availableVoices.length) selectedVoice = availableVoices[0];
+    renderSidebar();
+});
 </script>
 </body>
 </html>
